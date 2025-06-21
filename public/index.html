@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sorian Editora</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h3>Sorian Editora</h3>
+        </div>
+        <div class="sidebar-menu">
+            <ul>
+                <li><a href="#" data-section="proposals" class="active"><i class="fas fa-scroll"></i> <span>Propostas</span></a></li>
+                <li><a href="#" data-section="contracts" ><i class="fas fa-file-contract"></i> <span>Contratos</span></a></li>
+                <li><a href="#" data-section="projects"><i class="fas fa-project-diagram"></i> <span>Projetos</span></a></li>
+                <li><a href="#" data-section="financial"><i class="fas fa-money-bill-wave"></i> <span>Financeiro</span></a></li>
+                <li><a href="#" data-section="clients"><i class="fas fa-user-tie"></i> <span>Clientes</span></a></li>
+                <li><a href="#" data-section="configurations"><i class="fas fa-cog"></i> <span>Configurações</span></a></li>
+                <li><a href="#" data-section="users"><i class="fas fa-users"></i> <span>Usuários</span></a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Content Area -->
+        <div class="content-area">
+
+            <!-- Proposal Section -->
+            <div class="content-section active" id="proposals">
+                <div class="page-header">
+                    <div class="page-title">
+                        <h2>Propostas</h2>
+                    </div>
+                    <ul class="breadcrumb">
+                        <li>Início</li>
+                        <li>Propostas</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Propostas Enviadas</h3>
+                        <div>
+                            <button class="btn btn-secondary" id="export-proposal"><i class="fas fa-file-excel"></i> Exportar</button>
+                            <button class="btn" id="add-proposal-btn">Adicionar Proposta</button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <table id="proposal-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Última Atualização</th>
+                                    <th>Cliente</th>
+                                    <th>Descrição</th>
+                                    <th>Preço de Venda</th>
+                                    <th>Status</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contracts Section -->
+            <div class="content-section" id="contracts">
+                <div class="page-header">
+                    <div class="page-title">
+                        <h2>Contratos</h2>
+                    </div>
+                    <ul class="breadcrumb">
+                        <li>Início</li>
+                        <li>Contratos</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Contratos Registrados</h3>
+                        <div>
+                            <button class="btn btn-secondary" id="export-contracts"><i class="fas fa-file-excel"></i> Exportar</button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <table id="contracts-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Proposta</th>
+                                    <th>Data de Início</th>
+                                    <th>Cliente</th>
+                                    <th>Valor</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Projetos Section -->
+            <div class="content-section" id="projects">
+                <div class="page-header">
+                    <div class="page-title">
+                        <h2>Projetos</h2>
+                    </div>
+                    <ul class="breadcrumb">
+                        <li>Início</li>
+                        <li>Projetos</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Projetos Iniciados</h3>
+                        <div>
+                            <button class="btn btn-secondary" id="export-projects"><i class="fas fa-file-excel"></i> Exportar</button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <table id="projects-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Proposta</th>
+                                    <th>Última Atualização</th>
+                                    <th>Data de Início</th>
+                                    <th>Status</th>
+                                    <th>Observações</th>
+                                    <th>Livros Enviados</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Financial Section -->
+            <div class="content-section" id="financial">
+                <div class="page-header">
+                    <div class="page-title">
+                        <h2>Financeiro</h2>
+                    </div>
+                    <ul class="breadcrumb">
+                        <li>Início</li>
+                        <li>Financeiro</li>
+                    </ul>
+                </div>
+
+                <div class="stats">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-money-bill-wave"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h4>Valor Total Enviado em Propostas</h4>
+                            <p>R$ 00,00</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h4>Valor Total em Propostas Aceitas</h4>
+                            <p>R$ 00,00</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-money-bill-wave"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h4>Valor Recebido de Propostas</h4>
+                            <p>R$ 00,00</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h4>Total de Custos</h4>
+                            <p>R$ 00,00</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-money-bill-wave"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h4>A Receber</h4>
+                            <p>R$ 00,00</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h4>A Pagar</h4>
+                            <p>R$ 00,00</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="items-tabs">
+                    <div class="tab-buttons">
+                        <button class="tab-btn active" data-tab="propostas">Propostas</button>
+                        <button class="tab-btn" data-tab="custos">Custos</button>
+                        <button class="tab-btn" data-tab="receber">A Receber</button>
+                        <button class="tab-btn" data-tab="pagar">A Pagar</button>
+                    </div>
+
+                    <div class="tab-content active" id="propostas-tab">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Propostas</h3>
+                            </div>
+                            <div class="card-body">
+                                <table id="custos-propostas-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Proposta</th>
+                                            <th>Método de Pagamento</th>
+                                            <th>Parcelas</th>
+                                            <th>Entrada</th>
+                                            <th>Total Pago</th>
+                                            <th>A Pagar</th>
+                                            <th>Ações</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-content" id="custos-tab">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Custos</h3>
+                                <button class="btn" id="add-custo-btn">Adicionar Custo</button>
+                            </div>
+                            <div class="card-body">
+                                <table id="custos-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Valor Total</th>
+                                            <th>Ações</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-content" id="receber-tab">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Contas a Receber</h3>
+                                <button class="btn" id="add-receber-btn">Adicionar Conta</button>
+                            </div>
+                            <div class="card-body">
+                                <table id="receber-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Valor Total</th>
+                                            <th>Ações</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-content" id="pagar-tab">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Contas a Pagar</h3>
+                                <button class="btn" id="add-pagar-btn">Adicionar Conta</button>
+                            </div>
+                            <div class="card-body">
+                                <table id="pagar-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Valor Total</th>
+                                            <th>Ações</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Clients Section -->
+            <div class="content-section" id="clients">
+                <div class="page-header">
+                    <div class="page-title">
+                        <h2>Clientes</h2>
+                    </div>
+                    <ul class="breadcrumb">
+                        <li>Início</li>
+                        <li>Clientes</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Usuários</h3>
+                        <div>
+                            <button class="btn btn-secondary" id="export-clients">
+                                <i class="fas fa-file-excel"></i> Exportar
+                            </button>
+                            <button class="btn" id="add-cliente-btn">Adicionar Cliente</button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <table id="clients-table">
+                            <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>E-mail</th>
+                                    <th>Telefone</th>
+                                    <th>Endereço</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Configurations Section -->
+            <div class="content-section" id="configurations">
+                <div class="page-header">
+                    <div class="page-title">
+                        <h2>Configurações</h2>
+                    </div>
+                    <ul class="breadcrumb">
+                        <li>Início</li>
+                        <li>Configurações</li>
+                    </ul>
+                </div>
+
+                <div class="items-tabs">
+                    <div class="tab-buttons">
+                        <button class="tab-btn active" data-tab="taxas">Taxas</button>
+                        <button class="tab-btn" data-tab="planos">Planos</button>
+                        <button class="tab-btn" data-tab="dimensoes">Dimensões</button>
+                        <button class="tab-btn" data-tab="produtos">Produtos</button>
+                        <button class="tab-btn" data-tab="pacotes">Pacotes</button>
+                    </div>
+
+                    <div class="tab-content active" id="taxas-tab">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Taxas</h3>
+                            </div>
+                            <div class="card-body">
+                                <table id="taxas-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Custo Editorial</th>
+                                            <th>Cartão</th>
+                                            <th>Imposto</th>
+                                            <th>Ações</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-content" id="dimensoes-tab">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Dimensões</h3>
+                                <button class="btn" id="add-dimensao-btn">Adicionar Dimensão</button>
+                            </div>
+                            <div class="card-body">
+                                <table id="dimensoes-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Largura Mínima</th>
+                                            <th>Largura Máxima</th>
+                                            <th>Altura Mínima</th>
+                                            <th>Altura Máxima</th>
+                                            <th>Ações</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-content" id="produtos-tab">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Produtos</h3>
+                                <button class="btn" id="add-produto-btn">Adicionar Produto</button>
+                            </div>
+                            <div class="card-body">
+                                <table id="produtos-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Nome</th>
+                                            <th>Tipo</th>
+                                            <th>Categoria</th>
+                                            <th>Ações</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-content" id="planos-tab">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Planos</h3>
+                                <button class="btn" id="add-plano-btn">Adicionar Plano</button>
+                            </div>
+                            <div class="card-body">
+                                <table id="planos-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Nome</th>
+                                            <th>Quantidade do Autor</th>
+                                            <th>Lucro Desejado</th>
+                                            <th>Ações</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-content" id="pacotes-tab">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Planos</h3>
+                                <button class="btn" id="add-pacote-btn">Adicionar Pacote</button>
+                            </div>
+                            <div class="card-body">
+                                <table id="pacotes-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Produto</th>
+                                            <th>Dimensões</th>
+                                            <th>Quantidade</th>
+                                            <th>Preço</th>
+                                            <th>Ações</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Users Section -->
+            <div class="content-section" id="users">
+                <div class="page-header">
+                    <div class="page-title">
+                        <h2>Usuários</h2>
+                    </div>
+                    <ul class="breadcrumb">
+                        <li>Início</li>
+                        <li>Usuários</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Usuários</h3>
+                        <div>
+                            <button class="btn btn-secondary" id="export-users">
+                                <i class="fas fa-file-excel"></i> Exportar
+                            </button>
+                            <button class="btn" id="add-usuario-btn">Adicionar Usuário</button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <table id="users-table">
+                            <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>Usuário</th>
+                                    <th>E-mail</th>
+                                    <th>Tipo</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div id="addModal" class="modal-overlay">
+                <div class="modal-container">
+                    <div class="modal-header">
+                        <h3 class="modal-title" id="modalAddTitle">Adicionar Item</h3>
+                        <button class="close-modal" id="cancelAddButton">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="addForm" class="edit-form">
+                        </form>
+                    </div>
+                    <div class="modal-footer" id="modal-footer">
+                        <button type="button" class="btn btn-primary" id="confirmAddButton">Salvar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="actions.js"></script>
+    <script src="load.js"></script>
+    <script src="script.js"></script>
+    <script src="add.js"></script>
+</body>
+</html>
