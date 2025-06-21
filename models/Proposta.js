@@ -20,6 +20,9 @@ module.exports = (sequelize) => {
     paginas: {
       type: DataTypes.INTEGER
     },
+    paginas_coloridas: {
+      type: DataTypes.INTEGER
+    },
     plano_id: {
       type: DataTypes.INTEGER,
       references: {
