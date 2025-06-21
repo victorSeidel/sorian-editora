@@ -44,11 +44,12 @@ document.addEventListener('DOMContentLoaded', async function()
         XLSX.writeFile(workbook, `${fileName}.xlsx`);
     }
     
-    document.getElementById('export-proposal')?.addEventListener('click', ()  => exportToExcel('proposal-table', 'propostas'));
+    document.getElementById('export-proposal')?.addEventListener('click', () => exportToExcel('proposal-table', 'propostas'));
     document.getElementById('export-contracts')?.addEventListener('click', () => exportToExcel('contracts-table', 'contratos'));
-    document.getElementById('export-projects')?.addEventListener('click', ()  => exportToExcel('projects-table', 'projetos'));
-    document.getElementById('export-clients')?.addEventListener('click', ()   => exportToExcel('clients-table', 'clientes'));
-    document.getElementById('export-users')?.addEventListener('click', ()     => exportToExcel('users-table', 'usuarios'));
+    document.getElementById('export-projects')?.addEventListener('click', () => exportToExcel('projects-table', 'projetos'));
+    document.getElementById('export-custos-propostas')?.addEventListener('click', () => exportToExcel('custos-propostas-table', 'custos_propostas'));
+    document.getElementById('export-clients')?.addEventListener('click', () => exportToExcel('clients-table', 'clientes'));
+    document.getElementById('export-users')?.addEventListener('click', () => exportToExcel('users-table', 'usuarios'));
 });
 
 async function checkAuth() 
