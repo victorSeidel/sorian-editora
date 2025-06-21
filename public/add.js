@@ -33,14 +33,18 @@ function showAddModal(model, subModel = null)
     {
         case 'Proposta':
             addForm.innerHTML = `
+                <div class="form-group">
+                    <label>Cliente</label>
+                    <select name="cliente_id" id="clienteSelect" required></select> 
+                </div>
                 <div class="form-group" style="display:flex; flex-direction:row; width:100%; gap:10px">
-                    <div style="flex:5; width:100%">
-                        <label>Cliente</label>
-                        <select name="cliente_id" id="clienteSelect" required></select> 
+                    <div style="flex:1; width:100%">
+                        <label>Páginas PB</label>
+                        <input type="number" name="paginas" required>
                     </div>
                     <div style="flex:1; width:100%">
-                        <label>Páginas</label>
-                        <input type="number" name="paginas" required> 
+                        <label>Páginas Coloridas</label>
+                        <input type="number" name="paginas_coloridas" required> 
                     </div>
                 </div>
                 <div class="form-group" style="display:flex; flex-direction:row; width:100%; gap:10px">
@@ -114,9 +118,11 @@ function showAddModal(model, subModel = null)
                 select.innerHTML = '<option value="">Selecione um produto</option>';
                 produtos.forEach(p => 
                 {
+                    if (p.tipo === 'COLOR') return;
+
                     const opt = document.createElement('option');
                     opt.value = p.id;
-                    opt.textContent = `${p.classe} - ${p.nome} (${p.tipo})`;
+                    opt.textContent = `${p.classe} - ${p.nome}`;
                     select.appendChild(opt);
                 });
             }).catch(error => { console.error('Erro ao carregar produtos :', error); });
@@ -172,12 +178,7 @@ function showAddModal(model, subModel = null)
                     const classeJaAdicionada = produtosSelecionados.some(p => p.classe === produto.classe);
                     if (classeJaAdicionada) { showToast(`Você já adicionou um tipo de ${produto.classe}`, 'error'); return; }
 
-                    produtosSelecionados.push({
-                        id: produto.id,
-                        nome: produto.nome,
-                        tipo: produto.tipo,
-                        classe: produto.classe
-                    });
+                    produtosSelecionados.push({ id: produto.id, nome: produto.nome, tipo: produto.tipo, classe: produto.classe });
 
                     atualizarListaProdutos();
                     produtoSelect.selectedIndex = 0;
@@ -233,29 +234,37 @@ function showAddModal(model, subModel = null)
                 </div>
                 <div class="form-group">
                     <label>Tipo</label>
-                    <input type="text" name="tipo" maxlength="20" required>
+                    <select name="tipo" id="tipoSelect" required></select>
                 </div>
                 <div class="form-group">
                     <label>Categoria</label>
-                    <select name="classe" id="classeSelect" required>
-                        <option value="">Selecione uma categoria</option>
-                        <option value="Página">Página</option>
-                        <option value="Capa">Capa</option>
-                    </select>
+                    <select name="categoria" id="categoriaSelect" required></select>
                 </div>
             `;
             Promise.all([
-                fetch('/api/dimensoes').then(res => res.json()),
-            ]).then(([dimensoes]) => 
+                fetch('/api/diversos/tipos').then(res => res.json()),
+                fetch('/api/diversos/categorias').then(res => res.json()),
+            ]).then(([tipos, categorias]) => 
             {
-                const dimensaoSelect = addForm.querySelector('[name="dimensao_id"]');
+                const tipoSelect      = addForm.querySelector('[name="tipo"]');
+                const categoriaSelect = addForm.querySelector('[name="categoria"]');
                 
-                dimensoes.forEach(dimensao => 
+                tipoSelect.innerHTML = '<option value="">Selecione um tipo</option>';
+                tipos.forEach(tipo => 
                 {
                     const option = document.createElement('option');
-                    option.value = dimensao.id;
-                    option.textContent = `${dimensao.largura_min} x ${dimensao.altura_min} a ${dimensao.largura_max} x ${dimensao.altura_max}`;
-                    dimensaoSelect.appendChild(option);
+                    option.value = tipo.nome;
+                    option.textContent = `${tipo.nome}`;
+                    tipoSelect.appendChild(option);
+                });
+
+                categoriaSelect.innerHTML = '<option value="">Selecione uma categoria</option>';
+                categorias.forEach(categoria => 
+                {
+                    const option = document.createElement('option');
+                    option.value = categoria.nome;
+                    option.textContent = `${categoria.nome}`;
+                    categoriaSelect.appendChild(option);
                 });
             });
             break;
@@ -440,6 +449,7 @@ async function handleAddProposta()
     {
         cliente_id: formData.get('cliente_id'),
         paginas: formData.get('paginas'),
+        paginas_coloridas: formData.get('paginas_coloridas'),
         pacote_pagina_id: pacote_pagina_id,
         pacote_capa_id: pacote_capa_id,
         plano_id: formData.get('plano_id'),
@@ -469,6 +479,7 @@ async function handleAddProposta()
 async function calcularPrecoVenda() 
 {
     const paginas = parseInt(document.querySelector('[name="paginas"]').value);
+    const paginasColoridas = parseInt(document.querySelector('[name="paginas_coloridas"]').value);
     const dimensaoId = parseInt(document.querySelector('[name="dimensao_id"]').value);
     const planoId = parseInt(document.querySelector('[name="plano_id"]').value);
     const produtos = produtosSelecionados;
@@ -486,7 +497,13 @@ async function calcularPrecoVenda()
         const pacote = await fetch(`${API_BASE_URL}/pacotes/filtro/${produto.id}/${dimensaoId}/${paginas}`).then(r => r.json());
         if (!pacote) { showToast('Nenhum pacote encontrado com as especificações', 'error'); return; }
 
-        if (produto.classe === 'Página') { precoTotal += parseFloat(pacote.preco * paginas); document.getElementById('pacote_pagina_id').value = pacote.id }
+        if (produto.classe === 'Página') 
+        { 
+            precoTotal += parseFloat(pacote.preco * paginas); 
+            document.getElementById('pacote_pagina_id').value = pacote.id;
+            const pacoteColor = await fetch(`${API_BASE_URL}/pacotes/filtro/color/${produto.id}/${dimensaoId}/${paginasColoridas}`).then(r => r.json());
+            precoTotal += parseFloat(pacoteColor.preco * paginasColoridas);
+        }
         if (produto.classe === 'Capa')   { precoTotal += parseFloat(pacote.preco);           document.getElementById('pacote_capa_id').value   = pacote.id }
     }
 
@@ -570,7 +587,7 @@ function handleAddProduct()
     {
         nome: formData.get('nome'),
         tipo: formData.get('tipo'),
-        classe: formData.get('classe')
+        classe: formData.get('categoria')
     };
     
     fetch(`${API_BASE_URL}/produtos`, 
