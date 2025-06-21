@@ -11,7 +11,7 @@ const session = require('express-session');
 
 const app = express();
 
-const allowedOrigins = ['http://localhost:3000', 'http://127.0.0.1:3000', 'http://0.0.0.0:3000'];
+const allowedOrigins = ['http://localhost:3000', 'http://127.0.0.1:3000', 'http://0.0.0.0:3000', 'https://sorian-editora.onrender.com'];
 const allowedHeaders = ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin', 'Access-Control-Allow-Credentials'];
 const corsOptions =
 {
