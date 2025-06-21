@@ -144,7 +144,7 @@ function showAddModal(model, subModel = null)
                     produtoDiv.style.borderRadius = '4px';
                     
                     produtoDiv.innerHTML = `
-                        <span>${produto.classe} - ${produto.nome} (${produto.tipo})</span>
+                        <span>${produto.classe} - ${produto.nome}</span>
                         <button type="button" class="btn-remover" data-index="${index}"><i class="fa fa-trash"></i></button>
                     `;
                     
@@ -501,8 +501,12 @@ async function calcularPrecoVenda()
         { 
             precoTotal += parseFloat(pacote.preco * paginas); 
             document.getElementById('pacote_pagina_id').value = pacote.id;
-            const pacoteColor = await fetch(`${API_BASE_URL}/pacotes/filtro/color/${produto.id}/${dimensaoId}/${paginasColoridas}`).then(r => r.json());
-            precoTotal += parseFloat(pacoteColor.preco * paginasColoridas);
+
+            if (paginasColoridas > 0)
+            {
+                const pacoteColor = await fetch(`${API_BASE_URL}/pacotes/filtro/color/${produto.id}/${dimensaoId}/${paginasColoridas}`).then(r => r.json());
+                precoTotal += parseFloat(pacoteColor.preco * paginasColoridas);   
+            }
         }
         if (produto.classe === 'Capa')   { precoTotal += parseFloat(pacote.preco);           document.getElementById('pacote_capa_id').value   = pacote.id }
     }
