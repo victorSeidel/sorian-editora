@@ -7,6 +7,7 @@ const ProjetoController    = require('./controllers/projetoController');
 const ClienteController    = require('./controllers/clienteController');
 const UsuarioController    = require('./controllers/usuarioController');
 const DimensaoController   = require('./controllers/dimensaoController');
+const DiversosController   = require('./controllers/diversosController');
 const TaxaController       = require('./controllers/taxaController');
 const ProdutoController    = require('./controllers/produtoController');
 const PlanoController      = require('./controllers/planoController');
@@ -55,6 +56,18 @@ router.get('/dimensoes/:id', DimensaoController.buscarDimensaoPorId);
 router.put('/dimensoes/:id', DimensaoController.atualizarDimensao);
 router.delete('/dimensoes/:id', DimensaoController.deletarDimensao);
 
+// Tipo
+router.post('/diversos/tipos', DiversosController.criarTipo);
+router.get('/diversos/tipos', DiversosController.listarTipos);
+router.get('/diversos/tipos/:id', DiversosController.buscarTipoPorId);
+router.delete('/diversos/tipos/:id', DiversosController.deletarTipo);
+
+// Categoria
+router.post('/diversos/categorias', DiversosController.criarCategoria);
+router.get('/diversos/categorias', DiversosController.listarCategorias);
+router.get('/diversos/categorias/:id', DiversosController.buscarCategoriaPorId);
+router.delete('/diversos/categorias/:id', DiversosController.deletarCategoria);
+
 // Taxa
 router.get('/taxas', TaxaController.buscarTaxaPorId);
 router.put('/taxas', TaxaController.atualizarTaxa);
@@ -78,6 +91,7 @@ router.post('/pacotes', PacoteController.criarPacote);
 router.get('/pacotes', PacoteController.listarPacotes);
 router.get('/pacotes/:id', PacoteController.buscarPacotePorId);
 router.get('/pacotes/filtro/:produto_id/:dimensao_id/:paginas', PacoteController.buscarPacotePorFiltro);
+router.get('/pacotes/filtro/color/:produto_id/:dimensao_id/:paginas', PacoteController.buscarPacoteColorPorFiltro);
 router.put('/pacotes/:id', PacoteController.atualizarPacote);
 router.delete('/pacotes/:id', PacoteController.deletarPacote);
 
