@@ -142,6 +142,7 @@ async function loadInitialData()
         await loadContractsTable();
         await loadProjectsTable();
         await loadDimensionsTable();
+        await loadDiversosTable();
         await loadTaxasTable();
         await loadProdutosTable();
         await loadPlanosTable();
