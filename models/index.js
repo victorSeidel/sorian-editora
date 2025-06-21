@@ -6,6 +6,8 @@ const Projeto       = require('./Projeto')(sequelize);
 const Cliente       = require('./Cliente')(sequelize);
 const Usuario       = require('./Usuario')(sequelize);
 const Dimensao      = require('./Dimensao')(sequelize);
+const Tipo          = require('./Tipo')(sequelize);
+const Categoria     = require('./Categoria')(sequelize);
 const Taxa          = require('./Taxa')(sequelize);
 const Produto       = require('./Produto')(sequelize);
 const Plano         = require('./Plano')(sequelize);
@@ -54,7 +56,7 @@ module.exports =
   
   Proposta, Contrato, Projeto,
   Cliente, Usuario,
-  Dimensao, Taxa,
+  Dimensao, Taxa, Tipo, Categoria,
   Produto, Plano, Pacote, PacoteProduto,
 
   PropostaCusto, Custo, Receber, Pagar
