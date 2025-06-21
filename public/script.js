@@ -3,7 +3,7 @@ let tipoUsuario = '';
 
 document.addEventListener('DOMContentLoaded', async function() 
 {
-    checkAuth();
+    await checkAuth();
     loadInitialData();
     setupMenu();
     setupTabs();
@@ -46,6 +46,8 @@ document.addEventListener('DOMContentLoaded', async function()
     
     document.getElementById('export-proposal')?.addEventListener('click', ()  => exportToExcel('proposal-table', 'propostas'));
     document.getElementById('export-contracts')?.addEventListener('click', () => exportToExcel('contracts-table', 'contratos'));
+    document.getElementById('export-projects')?.addEventListener('click', ()  => exportToExcel('projects-table', 'projetos'));
+    document.getElementById('export-clients')?.addEventListener('click', ()   => exportToExcel('clients-table', 'clientes'));
     document.getElementById('export-users')?.addEventListener('click', ()     => exportToExcel('users-table', 'usuarios'));
 });
 
@@ -56,15 +58,14 @@ async function checkAuth()
         const responseUsuario = await fetch('/api/session', { method: 'GET', credentials: 'include' });
         const tokenUsuario    = await responseUsuario.json();
 
-        const id    = tokenUsuario.usuario ? (tokenUsuario.usuario.id || -1) : -1;
-        tipoUsuario = tokenUsuario.usuario ? (tokenUsuario.usuario.tipo || '') : '';
+        const id = tokenUsuario.usuario ? (tokenUsuario.usuario.id || -1) : -1;
 
         if (!responseUsuario.ok || id === -1) { showToast('Erro ao buscar credenciais', 'error'); window.location.href = '/login'; return; }
 
+        tipoUsuario = tokenUsuario.usuario ? (tokenUsuario.usuario.tipo || '') : '';
+
         const response = await fetch(`${API_BASE_URL}/usuarios/${id}`);
-
         if (!response.ok) { showToast('Erro ao buscar usuário', 'error'); return; }
-
         usuario = await response.json();
     } 
     catch (error) 
@@ -158,6 +159,7 @@ async function loadInitialData()
 
 function setupMenu() 
 {
+    hideAll();
     if (tipoUsuario === '') return;
     
     const menuItems = document.querySelectorAll('.sidebar-menu li');
@@ -165,16 +167,15 @@ function setupMenu()
     
     const baseItems = ['profile', 'logout'];
     
-    baseItems.forEach(item => 
-    {
-        const el = document.querySelector(`.sidebar-menu li[data-section="${item}"]`);
-        if (el) el.style.display = 'block';
-    });
+    baseItems.forEach(item => { const el = document.querySelector(`.sidebar-menu li[data-section="${item}"]`); if (el) el.style.display = 'block'; });
     
     switch(tipoUsuario) 
     {
         case 'Administrador':
             showAdminMenu();
+            break;
+        case 'Comercial':
+            showComercialMenu();
             break;
         case 'Financeiro':
             showFinanceMenu();
@@ -182,49 +183,48 @@ function setupMenu()
         case 'Projetos':
             showProjectsMenu();
             break;
-        case 'Suporte':
-            showSupportMenu();
+        case 'Pós-Venda':
+            showPosMenu();
             break;
         case '':
             window.Location.redirect = '/logi';
     }
 }
 
+function hideAll() 
+{
+    const sections = ['proposals', 'contracts', 'projects', 'financial', 'clients', 'configurations', 'users'];
+    sections.forEach(section => { const el = document.querySelector(`.sidebar-menu a[data-section="${section}"]`); if (el) el.parentElement.style.display = 'none'; });
+}
+
 function showAdminMenu() 
 {
-    const sections = ['proposals', 'contracts', 'financial', 'configurations', 'users'];
-    sections.forEach(section => 
-    {
-        const el = document.querySelector(`.sidebar-menu li[data-section="${section}"]`);
-        if (el) el.style.display = 'block';
-    });
+    const sections = ['proposals', 'contracts', 'projects', 'financial', 'clients', 'configurations', 'users'];
+    sections.forEach(section => { const el = document.querySelector(`.sidebar-menu a[data-section="${section}"]`); if (el) el.parentElement.style.display = 'block'; });
+}
+
+function showComercialMenu() 
+{
+    const sections = ['proposals', 'contracts'];
+    sections.forEach(section => { const el = document.querySelector(`.sidebar-menu a[data-section="${section}"]`); if (el) el.parentElement.style.display = 'block'; });
 }
 
 function showFinanceMenu() 
 {
-    const sections = ['proposals', 'contracts', 'financial'];
-    sections.forEach(section => {
-        const el = document.querySelector(`.sidebar-menu li[data-section="${section}"]`);
-        if (el) el.style.display = 'block';
-    });
+    const sections = ['financial'];
+    sections.forEach(section => { const el = document.querySelector(`.sidebar-menu a[data-section="${section}"]`); if (el) el.parentElement.style.display = 'block'; });
 }
 
 function showProjectsMenu()
 {
-    const sections = ['proposals', 'contracts', 'financial'];
-    sections.forEach(section => {
-        const el = document.querySelector(`.sidebar-menu li[data-section="${section}"]`);
-        if (el) el.style.display = 'block';
-    });
+    const sections = ['projects'];
+    sections.forEach(section => { const el = document.querySelector(`.sidebar-menu a[data-section="${section}"]`); if (el) el.parentElement.style.display = 'block'; });
 }
 
-function showSupportMenu() 
+function showPosMenu() 
 {
-    const sections = ['proposals', 'configurations', 'users'];
-    sections.forEach(section => {
-        const el = document.querySelector(`.sidebar-menu li[data-section="${section}"]`);
-        if (el) el.style.display = 'block';
-    });
+    const sections = ['contracts'];
+    sections.forEach(section => { const el = document.querySelector(`.sidebar-menu a[data-section="${section}"]`); if (el) el.parentElement.style.display = 'block'; });
 }
 
 function setupTabs()
