@@ -1,4 +1,3 @@
-//const API_BASE_URL = 'http://localhost:3000/api';
 const API_BASE_URL = 'https://sorian-editora.onrender.com/api';
 
 function setupTableActions(tableId) 
@@ -159,8 +158,9 @@ async function editItem(tableId, id)
             title: 'Editar Proposta',
             fields: 
             [
-                { name: 'metodo_pagamento', label: 'Método de Pagamento', type: 'select', required: true, showIf: { field: 'parcelas', equals: '' },
+                { name: 'metodo_pagamento', label: 'Método de Pagamento', type: 'select', required: true, showIf: values => values.metodo_pagamento == null,
                     options: [
+                        { value: '', label: 'Selecione um método...' },
                         { value: 'PIX', label: 'PIX' },
                         { value: 'Boleto', label: 'Boleto' },
                         { value: 'Crédito', label: 'Crédito' },
@@ -170,8 +170,8 @@ async function editItem(tableId, id)
                         { value: 'PayPal', label: 'PayPal' }
                     ]
                 },
-                { name: 'parcelas', label: 'Parcelas', type: 'number', required: true, showIf: { field: 'parcelas', equals: 0 } },
-                { name: 'entrada', label: 'Entrada', type: 'number', required: true, showIf: { field: 'entrada', equals: 0 } },
+                { name: 'parcelas', label: 'Parcelas', type: 'number', required: true, showIf: values => values.parcelas == 0 || values.parcelas == null },
+                { name: 'entrada', label: 'Entrada', type: 'number', required: true, showIf: values => values.entrada <= 0 },
                 { name: 'parcelas_pagas', label: 'Parcelas Pagas', type: 'number', required: true },
             ],
             loader: loadCustosTable
@@ -249,7 +249,7 @@ async function showEditModal({ title, fields, values })
         fields.forEach(field => 
         {
             let shouldDisable = false;
-            if (field.showIf) { const compareValue = values[field.showIf.field]; if (compareValue !== field.showIf.equals) shouldDisable = true; }
+            if (typeof field.showIf === 'function') shouldDisable = !field.showIf(values);
 
             const div = document.createElement('div');
             div.className = 'form-group';
@@ -356,6 +356,16 @@ async function deleteItem(tableId, id)
             endpoint: (id) => `${API_BASE_URL}/dimensoes/${id}`,
             message: 'Dimensão removida com sucesso!',
             reload: loadDimensionsTable
+        },
+        '#tipos-table': {
+            endpoint: (id) => `${API_BASE_URL}/diversos/tipos/${id}`,
+            message: 'Tipo removido com sucesso!',
+            reload: loadDiversosTable
+        },
+        '#categorias-table': {
+            endpoint: (id) => `${API_BASE_URL}/diversos/categorias/${id}`,
+            message: 'Categoria removida com sucesso!',
+            reload: loadDiversosTable
         },
         '#contracts-table': {
             endpoint: (id) => `${API_BASE_URL}/contratos/${id}`,
