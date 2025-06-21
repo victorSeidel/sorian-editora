@@ -76,11 +76,50 @@ class PacoteController
     {
       const { produto_id, dimensao_id, paginas } = req.params;
 
-      if (!produto_id || !dimensao_id || !paginas) { return res.status(400).json({ error: 'Parâmetros produto_id, dimensao_id e paginas são obrigatórios' }); }
+      if (!produto_id || !dimensao_id || !paginas) { return res.status(400).json({ error: 'Parâmetros produto_id, dimensao_id e páginas são obrigatórios' }); }
 
       const pacote = await Pacote.findOne({
         where: {
           produto_id,
+          dimensao_id,
+          quantidade_minima: { [Op.lte]: paginas },
+          quantidade_maxima: { [Op.gte]: paginas }
+        },
+        include: [
+          { model: Produto },
+          { model: Dimensao }
+        ]
+      });
+
+      if (!pacote) {
+        return res.status(404).json({ error: 'Pacote não encontrado para os critérios fornecidos' });
+      }
+
+      return res.status(200).json(pacote);
+    } 
+    catch (error) 
+    {
+      console.error('Erro ao buscar pacote por filtro:', error);
+      return res.status(500).json({ error: error.message });
+    }
+  }
+
+  static async buscarPacoteColorPorFiltro(req, res) 
+  {
+    try 
+    {
+      const { produto_id, dimensao_id, paginas } = req.params;
+
+      if (!produto_id || !dimensao_id || !paginas) { return res.status(400).json({ error: 'Parâmetros produto_id, dimensao_id e páginas são obrigatórios' }); }
+
+      const produto = await Produto.findByPk(produto_id);
+      const nomeProduto = produto.nome;
+      const produtoColor = await Produto.findOne({ where: { nome: nomeProduto, tipo: 'COLOR' } });
+      const produtoId = produtoColor.id;
+
+      const pacote = await Pacote.findOne({
+        where: {
+          produto_id: produtoId,
           dimensao_id,
           quantidade_minima: { [Op.lte]: paginas },
           quantidade_maxima: { [Op.gte]: paginas }
