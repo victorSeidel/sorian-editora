@@ -26,7 +26,7 @@ async function loadProposalsTable()
                 <td>${proposta.id}</td>
                 <td>${proposta.data.slice(0, 10)}</td>
                 <td>${proposta.cliente_id_formatted || proposta.cliente.nome}</td>
-                <td>${p.nome} (${p.tipo}) - ${c.nome} (${c.tipo}) - ${d.largura_min} x ${d.altura_min} a ${d.largura_max} x ${d.altura_max}</td>
+                <td>${p.nome} - ${c.nome} (${c.tipo}) - ${d.largura_min} x ${d.altura_min} a ${d.largura_max} x ${d.altura_max}</td>
                 <td>${formatMoeda(proposta.preco_venda)}</td>
                 <td><span class="status ${proposta.status}">${proposta.status}</span></td>
                 <td>
@@ -236,7 +236,8 @@ async function loadDimensionsTable()
 
         if (!data) return;
         
-        data.forEach(dimensao => {
+        data.forEach(dimensao => 
+        {
             const row = document.createElement('tr');
             
             row.innerHTML = `
@@ -258,6 +259,59 @@ async function loadDimensionsTable()
     catch (error) 
     {
         showToast('Erro ao carregar dimensões', 'error');
+        console.error(error);
+        throw error;
+    }
+}
+
+async function loadDiversosTable() 
+{
+    try 
+    {
+        const responseTipo      = await fetch(`${API_BASE_URL}/diversos/tipos`, { credentials: 'include' });
+        const responseCategoria = await fetch(`${API_BASE_URL}/diversos/categorias`, { credentials: 'include' });
+        
+        if (!responseTipo.ok || !responseCategoria.ok) { throw new Error('Erro ao carregar diversos'); }
+        
+        const dataTipos      = await responseTipo.json();
+        const dataCategorias = await responseCategoria.json();
+
+        const tiposTableBody      = document.querySelector('#tipos-table tbody');
+        const categoriasTableBody = document.querySelector('#categorias-table tbody');
+
+        tiposTableBody.innerHTML      = '';
+        categoriasTableBody.innerHTML = '';
+        
+        dataTipos.forEach(tipo => 
+        {
+            const row = document.createElement('tr');
+            
+            row.innerHTML = `
+                <td>${tipo.nome}</td>
+                <td><button class="btn-action delete" data-id="${tipo.id}" title="Remover"><i class="fas fa-trash"></i></button></td>
+            `;
+            
+            tiposTableBody.appendChild(row);
+        });
+
+        dataCategorias.forEach(categoria => 
+        {
+            const row = document.createElement('tr');
+            
+            row.innerHTML = `
+                <td>${categoria.nome}</td>
+                <td><button class="btn-action delete" data-id="${categoria.id}" title="Remover"><i class="fas fa-trash"></i></button></td>
+            `;
+            
+            categoriasTableBody.appendChild(row);
+        });
+        
+        setupTableActions('#tipos-table');
+        setupTableActions('#categorias-table');
+    } 
+    catch (error) 
+    {
+        showToast('Erro ao carregar diversos', 'error');
         console.error(error);
         throw error;
     }
@@ -323,7 +377,6 @@ async function loadProdutosTable()
                 <td>${produto.tipo}</td>
                 <td>${produto.classe}</td>
                 <td>
-                    <button class="btn-action edit" data-id="${produto.id}" title="Editar"><i class="fas fa-edit"></i></button>
                     <button class="btn-action delete" data-id="${produto.id}" title="Remover"><i class="fas fa-trash"></i></button>
                 </td>
             `;
