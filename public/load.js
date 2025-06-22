@@ -505,9 +505,10 @@ async function loadCustosTable()
         formattedPropostasData.forEach(custo => 
         {
             const row = document.createElement('tr');
-
+            
             row.innerHTML = `
                 <td>${custo.proposta_id_formatted || custo.proposta_id}</td>
+                <td>${custo.custoProposta.data.slice(0, 7)}</td>
                 <td>${custo.metodo_pagamento || ''}</td>
                 <td>${custo.parcelas}</td>
                 <td>${formatMoeda(custo.entrada)}</td>
@@ -527,6 +528,7 @@ async function loadCustosTable()
             const row = document.createElement('tr');
 
             row.innerHTML = `
+                <td>${custo.data.slice(0, 7)}</td>
                 <td>${formatMoeda(custo.valor)}</td>
                 <td><button class="btn-action delete" data-id="${custo.id}" title="Remover"><i class="fas fa-trash"></i></button></td>
             `;
@@ -539,6 +541,7 @@ async function loadCustosTable()
             const row = document.createElement('tr');
 
             row.innerHTML = `
+                <td>${custo.data.slice(0, 7)}</td>
                 <td>${formatMoeda(custo.valor)}</td>
                 <td><button class="btn-action delete" data-id="${custo.id}" title="Remover"><i class="fas fa-trash"></i></button></td>
             `;
@@ -551,6 +554,7 @@ async function loadCustosTable()
             const row = document.createElement('tr');
 
             row.innerHTML = `
+                <td>${custo.data.slice(0, 7)}</td>
                 <td>${formatMoeda(custo.valor)}</td>
                 <td><button class="btn-action delete" data-id="${custo.id}" title="Remover"><i class="fas fa-trash"></i></button></td>
             `;
