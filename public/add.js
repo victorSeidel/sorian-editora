@@ -494,30 +494,32 @@ async function calcularPrecoVenda()
     let precoTotal = 0;
     for (let produto of produtos) 
     {
-        const pacote = await fetch(`${API_BASE_URL}/pacotes/filtro/${produto.id}/${dimensaoId}/${paginas}`).then(r => r.json());
+        const pacote = await fetch(`${API_BASE_URL}/pacotes/filtro/${produto.id}/${dimensaoId}/${planoId}`).then(r => r.json());
         if (!pacote) { showToast('Nenhum pacote encontrado com as especificações', 'error'); return; }
 
         if (produto.classe === 'Página') 
         { 
             precoTotal += parseFloat(pacote.preco * paginas); 
             document.getElementById('pacote_pagina_id').value = pacote.id;
-
-            if (paginasColoridas > 0)
+            
+            if (!isNaN(paginasColoridas) && paginasColoridas > 0)
             {
-                const pacoteColor = await fetch(`${API_BASE_URL}/pacotes/filtro/color/${produto.id}/${dimensaoId}/${paginasColoridas}`).then(r => r.json());
-                precoTotal += parseFloat(pacoteColor.preco * paginasColoridas);   
+                const pacoteColor = await fetch(`${API_BASE_URL}/pacotes/filtro/color/${produto.id}/${dimensaoId}/${planoId}`).then(r => r.json());
+                precoTotal += parseFloat(pacoteColor.preco * paginasColoridas);
             }
         }
-        if (produto.classe === 'Capa')   { precoTotal += parseFloat(pacote.preco);           document.getElementById('pacote_capa_id').value   = pacote.id }
+
+        if (produto.classe === 'Capa') { precoTotal += parseFloat(pacote.preco); document.getElementById('pacote_capa_id').value   = pacote.id }
     }
 
     const lucro = parseFloat(plano.lucro);
     const custoEditorial = parseFloat(taxas.custo_editorial);
+    const precoVenda = (((precoTotal * plano.quantidade_autor) + custoEditorial) + lucro);
     const cartao = parseFloat(taxas.cartao / 100);
     const imposto = parseFloat(taxas.imposto / 100);
-    const precoVenda = (((precoTotal * plano.quantidade_autor) + custoEditorial) + lucro);
-    const precoTaxa = (precoVenda * cartao) * imposto;
-    const precoFinal = precoVenda + precoTaxa + 0.01;
+    const precoCartao = precoVenda * cartao;
+    const precoTaxa = (precoVenda + precoCartao) * imposto;
+    const precoFinal = precoVenda + precoCartao + precoTaxa;
 
     document.querySelector('[name="preco"]').value = formatMoeda(precoFinal);
 }
