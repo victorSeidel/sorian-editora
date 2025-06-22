@@ -10,6 +10,9 @@ module.exports = (sequelize) => {
     valor: {
       type: DataTypes.DECIMAL(10,3)
     },
+    data: {
+      type: DataTypes.DATE
+    }
   }, {
     tableName: 'pagar',
     timestamps: false
