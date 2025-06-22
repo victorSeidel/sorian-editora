@@ -99,26 +99,21 @@ async function loadStats()
         document.querySelectorAll('.stat-card p')[0].textContent = formatMoeda(valorTotal);
         document.querySelectorAll('.stat-card p')[1].textContent = formatMoeda(valorAceito);
 
-        const responsePropostas  = await fetch(`${API_BASE_URL}/financeiro/propostas`, { credentials: 'include' });
-        const responseCustos     = await fetch(`${API_BASE_URL}/financeiro/custos`, { credentials: 'include' });
-        const responseReceber    = await fetch(`${API_BASE_URL}/financeiro/receber`, { credentials: 'include' });
-        const responsePagar      = await fetch(`${API_BASE_URL}/financeiro/pagar`, { credentials: 'include' });
+        const calcularTotal = (selector, dataCellIndex, valueCellIndex) => 
+        {
+            let total = 0;
+            document.querySelectorAll(selector).forEach(row => 
+            {
+                const dataCell = row.cells[dataCellIndex].textContent;
+                if (dataNoIntervalo(dataCell, filtroDataInicio, filtroDataFim)) total += parseFloat(row.cells[valueCellIndex].textContent.replace(/[^\d,]/g, '').replace(',', '.'));
+            });
+            return total;
+        };
 
-        if (!responsePropostas || !responseReceber.ok || !responsePagar.ok) { throw new Error('Erro ao carregar dados financeiros'); }
-
-        const dataPropostas = await responsePropostas.json();
-        const dataCustos    = await responseCustos.json();
-        const dataReceber   = await responseReceber.json();
-        const dataPagar     = await responsePagar.json();
-
-        let propostas = 0;
-        dataPropostas.forEach(custo => { propostas += parseFloat(custo.pago); });
-        let custos = 0;
-        dataCustos.forEach(custo => { custos += parseFloat(custo.valor); });
-        let receber = 0;
-        dataReceber.forEach(custo => { receber += parseFloat(custo.valor); });
-        let pagar = 0;
-        dataPagar.forEach(custo => { pagar += parseFloat(custo.valor); });
+        const propostas = calcularTotal('#custos-propostas-table tbody tr', 1, 5);
+        const custos    = calcularTotal('#custos-table tbody tr', 0, 1);
+        const receber   = calcularTotal('#receber-table tbody tr', 0, 1);
+        const pagar     = calcularTotal('#pagar-table tbody tr', 0, 1);
 
         document.querySelectorAll('.stat-card p')[2].textContent = formatMoeda(propostas);
         document.querySelectorAll('.stat-card p')[3].textContent = formatMoeda(custos);
