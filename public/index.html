@@ -162,6 +162,13 @@
                     </ul>
                 </div>
 
+                <div class="filtro-data">
+                    <label>De:</label><input type="month" id="data-inicio" class="form-control" placeholder="Selecione uma data">
+                    <label>Até:</label><input type="month" id="data-fim" class="form-control" placeholder="Selecione uma data">
+                    <button class="btn btn-primary" id="aplicar-filtro">Aplicar</button>
+                    <button class="btn btn-secondary" id="limpar-filtro">Limpar</button>
+                </div>
+
                 <div class="stats">
                     <div class="stat-card">
                         <div class="stat-icon">
@@ -238,6 +245,7 @@
                                     <thead>
                                         <tr>
                                             <th>Proposta</th>
+                                            <th>Data</th>
                                             <th>Método de Pagamento</th>
                                             <th>Parcelas</th>
                                             <th>Entrada</th>
@@ -262,6 +270,7 @@
                                 <table id="custos-table">
                                     <thead>
                                         <tr>
+                                            <th>Data</th>
                                             <th>Valor Total</th>
                                             <th>Ações</th>
                                         </tr>
@@ -282,6 +291,7 @@
                                 <table id="receber-table">
                                     <thead>
                                         <tr>
+                                            <th>Data</th>
                                             <th>Valor Total</th>
                                             <th>Ações</th>
                                         </tr>
@@ -302,6 +312,7 @@
                                 <table id="pagar-table">
                                     <thead>
                                         <tr>
+                                            <th>Data</th>
                                             <th>Valor Total</th>
                                             <th>Ações</th>
                                         </tr>
@@ -584,6 +595,7 @@
     <script src="actions.js"></script>
     <script src="load.js"></script>
     <script src="script.js"></script>
+    <script src="filters.js"></script>
     <script src="add.js"></script>
 </body>
 </html>
