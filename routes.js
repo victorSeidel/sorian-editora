@@ -90,8 +90,8 @@ router.delete('/planos/:id', PlanoController.deletarPlano);
 router.post('/pacotes', PacoteController.criarPacote);
 router.get('/pacotes', PacoteController.listarPacotes);
 router.get('/pacotes/:id', PacoteController.buscarPacotePorId);
-router.get('/pacotes/filtro/:produto_id/:dimensao_id/:paginas', PacoteController.buscarPacotePorFiltro);
-router.get('/pacotes/filtro/color/:produto_id/:dimensao_id/:paginas', PacoteController.buscarPacoteColorPorFiltro);
+router.get('/pacotes/filtro/:produto_id/:dimensao_id/:plano_id', PacoteController.buscarPacotePorFiltro);
+router.get('/pacotes/filtro/color/:produto_id/:dimensao_id/:plano_id', PacoteController.buscarPacoteColorPorFiltro);
 router.put('/pacotes/:id', PacoteController.atualizarPacote);
 router.delete('/pacotes/:id', PacoteController.deletarPacote);
 
