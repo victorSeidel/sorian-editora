@@ -295,60 +295,41 @@ table tr:hover {
     display: block;
 }
 
-.filters {
+.filtro-data {
     display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
-    margin-bottom: 20px;
-    padding: 15px;
-    background-color: var(--light-gray);
-    border-radius: 8px;
-}
-
-.filter-group {
-    display: flex;
-    flex-direction: column;
-}
-
-.filter-group label {
-    margin-bottom: 5px;
-    font-size: 14px;
-    color: var(--dark-gray);
-}
-
-.filter-group select, 
-.filter-group input {
-    padding: 8px 12px;
-    border: 1px solid var(--medium-gray);
-    border-radius: 4px;
-    min-width: 180px;
-}
-
-.filter-group input[type="date"] {
-    padding: 7px 12px;
-}
-
-.filter-actions {
-    display: flex;
-    align-items: flex-end;
+    justify-content: center;
+    align-items: center;
     gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 30px;
 }
 
-.filter-actions button {
-    padding: 8px 15px;
-    border-radius: 4px;
-    cursor: pointer;
-    border: none;
+.filtro-data label {
+    margin: 0;
+    font-weight: 500;
 }
 
-.filter-actions .apply {
-    background-color: var(--primary-color);
-    color: white;
+.filtro-data input, .filtro-data button {
+    width: 120px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.filter-actions .reset {
-    background-color: var(--medium-gray);
-    color: var(--text-color);
+.filtro-data .form-control {
+    width: 170px;
+}
+
+@media (max-width: 768px) {
+    .filtro-data {
+        width: 100%;
+        margin-top: 10px;
+    }
+    
+    .filtro-data .form-control {
+        flex-grow: 1;
+    }
 }
 
 .table-link {
@@ -572,21 +553,21 @@ table tr:hover {
 }
 
 .btn-primary {
-    background-color: #4CAF50;
+    background-color: var(--primary-color);;
     color: white;
 }
 
 .btn-primary:hover {
-    background-color: #45a049;
+    background-color: var(--primary-dark);;
 }
 
 .btn-secondary {
-    background-color: #f1f1f1;
+    background-color: var(--medium-gray);
     color: #333;
 }
 
 .btn-secondary:hover {
-    background-color: #e0e0e0;
+    background-color: #d0d0d0;
 }
 
 .modal-overlay {
