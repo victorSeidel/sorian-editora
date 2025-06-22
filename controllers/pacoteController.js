@@ -1,4 +1,4 @@
-const { Pacote, Produto, Dimensao } = require('../models');
+const { Pacote, Plano, Produto, Dimensao } = require('../models');
 const { Op } = require('sequelize');
 
 class PacoteController 
@@ -74,16 +74,18 @@ class PacoteController
   {
     try 
     {
-      const { produto_id, dimensao_id, paginas } = req.params;
+      const { produto_id, dimensao_id, plano_id } = req.params;
 
-      if (!produto_id || !dimensao_id || !paginas) { return res.status(400).json({ error: 'Parâmetros produto_id, dimensao_id e páginas são obrigatórios' }); }
+      if (!produto_id || !dimensao_id || !plano_id) { return res.status(400).json({ error: 'Parâmetros produto_id, dimensao_id e plano_id são obrigatórios' }); }
 
-      const pacote = await Pacote.findOne({
+      const plano = await Plano.findByPk(plano_id);
+
+      let pacote = await Pacote.findOne({
         where: {
           produto_id,
           dimensao_id,
-          quantidade_minima: { [Op.lte]: paginas },
-          quantidade_maxima: { [Op.gte]: paginas }
+          quantidade_minima: { [Op.lte]: plano.quantidade_autor },
+          quantidade_maxima: { [Op.gte]: plano.quantidade_autor }
         },
         include: [
           { model: Produto },
@@ -91,9 +93,23 @@ class PacoteController
         ]
       });
 
-      if (!pacote) {
-        return res.status(404).json({ error: 'Pacote não encontrado para os critérios fornecidos' });
+      if (!pacote) 
+      {
+        pacote = await Pacote.findOne({
+          where: {
+            produto_id,
+            dimensao_id,
+            quantidade_maxima: { [Op.lt]: plano.quantidade_autor }
+          },
+          order: [['quantidade_maxima', 'DESC']],
+          include: [
+            { model: Produto },
+            { model: Dimensao }
+          ]
+        });
       }
+
+      if (!pacote) return res.status(404).json({ error: 'Pacote não encontrado para os critérios fornecidos' });
 
       return res.status(200).json(pacote);
     } 
@@ -110,25 +126,43 @@ class PacoteController
     {
       const { produto_id, dimensao_id, paginas } = req.params;
 
-      if (!produto_id || !dimensao_id || !paginas) { return res.status(400).json({ error: 'Parâmetros produto_id, dimensao_id e páginas são obrigatórios' }); }
+      if (!produto_id || !dimensao_id || !plano_id) { return res.status(400).json({ error: 'Parâmetros produto_id, dimensao_id e plano_id são obrigatórios' }); }
+
+      const plano = await Plano.findByPk(plano_id);
 
       const produto = await Produto.findByPk(produto_id);
       const nomeProduto = produto.nome;
       const produtoColor = await Produto.findOne({ where: { nome: nomeProduto, tipo: 'COLOR' } });
       const produtoId = produtoColor.id;
 
-      const pacote = await Pacote.findOne({
+      let pacote = await Pacote.findOne({
         where: {
           produto_id: produtoId,
           dimensao_id,
-          quantidade_minima: { [Op.lte]: paginas },
-          quantidade_maxima: { [Op.gte]: paginas }
+          quantidade_minima: { [Op.lte]: plano.quantidade_autor },
+          quantidade_maxima: { [Op.gte]: plano.quantidade_autor }
         },
         include: [
           { model: Produto },
           { model: Dimensao }
         ]
       });
+
+      if (!pacote) 
+      {
+        pacote = await Pacote.findOne({
+          where: {
+            produto_id: produtoId,
+            dimensao_id,
+            quantidade_maxima: { [Op.lt]: plano.quantidade_autor }
+          },
+          order: [['quantidade_maxima', 'DESC']],
+          include: [
+            { model: Produto },
+            { model: Dimensao }
+          ]
+        });
+      }
 
       if (!pacote) {
         return res.status(404).json({ error: 'Pacote não encontrado para os critérios fornecidos' });
